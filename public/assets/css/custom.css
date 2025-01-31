@@ -1,0 +1,279 @@
+/* Menghapus border saat tab-pane aktif */
+.tab-pane {
+    border: none !important;
+}
+
+/* Menghapus border saat tab-pane dalam keadaan fokus */
+.tab-pane:focus {
+    outline: none !important;
+}
+
+/* Menghapus border saat tab-pane dalam keadaan aktif */
+.tab-pane.active {
+    border: none !important;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td, th {
+    text-align: left!important;
+}
+
+.table-nowrap {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table-nowrap th, .table-nowrap td {
+    padding: 8px;
+    white-space: nowrap; /* Mencegah teks terbungkus */
+}
+
+.select2-selection__arrow{
+    margin-top: 27px!important;
+}
+
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+    display: inline-block;
+    vertical-align: middle;
+}
+.dt-container .dt-buttons {
+    float: left;
+}
+
+.dataTables_wrapper .dataTables_length {
+    float: left;
+}
+
+.dataTables_wrapper .dataTables_filter {
+    float: right;
+}
+
+.dt-info {
+    margin-top: 4px!important;
+    float: left!important;
+}
+
+.dt-paging {
+    margin-top: 4px!important;
+    float: right!important;
+}
+
+[data-bs-theme=dark][data-color-theme=Blue_Theme]:root .btn-secondary, [data-bs-theme=light][data-color-theme=Blue_Theme]:root .btn-secondary{
+    --bs-btn-bg: #5d87ff;
+    --bs-btn-border-color: #5d87ff;
+    --bs-btn-hover-bg: #4f73d9;
+    --bs-btn-hover-border-color: #4f73d9;
+}
+
+#datatable-v_wrapper {
+    padding: 12px!important;
+}
+
+.grecaptcha-badge{
+    z-index: 9999; /* Membawa elemen ke depan */
+}
+
+.square-img {
+    width: 400px; /* Lebar kotak persegi */
+    height: 400px; /* Tinggi disamakan dengan lebar */
+    object-fit: cover; /* Memastikan gambar tetap proporsional dan memenuhi kotak */
+    object-position: center; /* Memposisikan gambar di tengah */
+    background-color: #f0f0f0; /* Warna background jika ada area kosong (opsional) */
+    border: 1px solid #ddd; /* Opsional: Menambahkan border */
+    border-radius: 5px; /* Opsional: Melengkungkan sudut */
+}
+
+/* Lagel Generator */
+.label {
+    height: 29mm; /* Tinggi tetap */
+    width: 62mm; /* Pertahankan tata letak 3 kolom */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 0.5cm;
+    box-sizing: border-box;
+    border: 1px solid #000;
+    padding: 10px;
+    text-align: center;
+    page-break-inside: avoid;
+}
+
+.label img {
+    max-width: 100%; /* Gambar responsif */
+    height: 38px;
+}
+
+.label-info {
+    flex: 1;
+    text-align: left;
+    font-size: 0.7rem;
+    padding-right: 10px;
+    white-space: normal;
+    word-wrap: break-word;
+}
+.label-qr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.label-qr img {
+    max-width: 100px; /* Batasi ukuran QR Code di layar kecil */
+    height: 76px;
+}
+
+.label-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media print {
+    #label-output {
+        width: 100%; /* Sesuaikan agar pas di halaman cetak */
+        margin: 0 auto;
+        page-break-after: auto; /* Hindari halaman kosong */
+        display: flex!important;
+        flex-wrap: wrap;
+        gap: 10px; /* Jarak antar elemen */
+    }
+}
+
+@media (max-width: 768px) { /* Aturan untuk perangkat mobile */
+    .label {
+        height: 29mm; /* Tinggi tetap */
+        width: 62mm; /* Pertahankan tata letak 3 kolom */
+        padding: 5px; /* Kurangi padding untuk layar kecil */
+        margin-bottom: 15px; /* Tambahkan jarak antar elemen */
+    }
+
+    .label-info p {
+        font-size: 12px; /* Ukuran font lebih kecil */
+    }
+
+    .label-qr img {
+        max-width: 100px; /* Batasi ukuran QR Code di layar kecil */
+        height: 76px;
+    }
+}
+
+.page {
+    font-size: 11px;
+    width: 19cm;
+    height: auto;
+    margin: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.badge-sm {
+    font-size: 0.75rem;
+    padding: 0.25em 0.5em;
+}
+
+/* Untuk browser Webkit seperti Chrome, Safari, dan Opera */
+::-webkit-scrollbar {
+    height: 6px; /* Ubah nilai ini sesuai keinginan Anda */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888; /* Warna scroll bar */
+    border-radius: 10px; /* Membuat scroll bar lebih bulat */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Warna scroll bar saat di-hover */
+}
+
+/* Untuk browser Firefox */
+html {
+    scrollbar-width: thin; /* Mengatur lebar scroll bar */
+    scrollbar-color: #888 #f1f1f1; /* Warna scroll bar dan background */
+}
+
+/* Untuk browser Webkit seperti Chrome, Safari, dan Opera */
+table::-webkit-scrollbar {
+    height: 4px; /* Ubah nilai ini sesuai keinginan Anda */
+    width: 4px;
+}
+
+table::-webkit-scrollbar-thumb {
+    background-color: #888; /* Warna scroll bar */
+    border-radius: 10px; /* Membuat scroll bar lebih bulat */
+}
+
+table::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Warna scroll bar saat di-hover */
+}
+
+/* Untuk browser Firefox */
+table {
+    scrollbar-width: thin; /* Mengatur lebar scroll bar */
+    scrollbar-color: #888 #f1f1f1; /* Warna scroll bar dan background */
+}
+
+/* Untuk browser Webkit seperti Chrome, Safari, dan Opera */
+.table-responsive::-webkit-scrollbar {
+    height: 4px; /* Ubah nilai ini sesuai keinginan Anda */
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: #888; /* Warna scroll bar */
+    border-radius: 10px; /* Membuat scroll bar lebih bulat */
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Warna scroll bar saat di-hover */
+}
+
+/* Untuk browser Firefox */
+.table-responsive {
+    scrollbar-width: thin; /* Mengatur lebar scroll bar */
+    scrollbar-color: #888 #f1f1f1; /* Warna scroll bar dan background */
+}
+
+.auth-card-custom{
+    max-width: 860px;
+    width: 100%;
+}
+
+.nav-pills {
+    display: flex;
+    flex-wrap: nowrap; /* Menghilangkan wrapping */
+    overflow-x: auto;  /* Menambahkan scroll horizontal */
+    white-space: nowrap; /* Mencegah elemen membungkus */
+}
+
+.nav-item {
+    flex: 0 0 auto; /* Memastikan ukuran item tetap */
+}
+
+
+
+@media print {
+    .page {
+        page-break-after: always;
+    }
+    .label {
+        page-break-inside: avoid;
+    }
+}
+/* end Label Generator*/
+
+
+@media (min-width: 992px) {
+    .sticky-side-div{
+        position: sticky;
+        top: calc(70px + 1.5rem);
+    }
+}
+
+
+
