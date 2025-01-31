@@ -20,86 +20,6 @@
         </li>
 
         <!-- ---------------------------------- -->
-        <!-- Analytics -->
-        <!-- ---------------------------------- -->
-        <li class="nav-small-cap">
-            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-            <span class="hide-menu">Analytics</span>
-        </li>
-
-        <!-- ---------------------------------- -->
-        <!-- Dashboard -->
-        <!-- ---------------------------------- -->
-        <li class="sidebar-item">
-            <a class="sidebar-link justify-content-between" href="{{ url('dashboard') }}" aria-expanded="false">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="fa-solid fa-chart-line"></i>
-                  </span>
-                    <span class="hide-menu">Dashboard</span>
-                </div>
-            </a>
-        </li>
-
-        <!-- ---------------------------------- -->
-        <!-- Survey -->
-        <!-- ---------------------------------- -->
-        @role('Super Admin|Admin')
-        <li class="nav-small-cap">
-            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-            <span class="hide-menu">Survey</span>
-        </li>
-        @endrole
-
-        <!-- ---------------------------------- -->
-        <!-- Create Form -->
-        <!-- ---------------------------------- -->
-        @role('Super Admin')
-        <li class="sidebar-item">
-            <a class="sidebar-link justify-content-between" href="{{ url('survey') }}" aria-expanded="false">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="fa-solid fa-clipboard-list"></i>
-                  </span>
-                    <span class="hide-menu">Create Form</span>
-                </div>
-            </a>
-        </li>
-        @endrole
-
-        <!-- ---------------------------------- -->
-        <!-- Approval -->
-        <!-- ---------------------------------- -->
-        @role('Super Admin|Admin')
-        <li class="sidebar-item">
-            <a class="sidebar-link justify-content-between" href="{{ url('survey/approval') }}" aria-expanded="false">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="fa-solid fa-list-check"></i>
-                  </span>
-                    <span class="hide-menu">Approval</span>
-                </div>
-            </a>
-        </li>
-        @endrole
-
-        <!-- ---------------------------------- -->
-        <!-- Survey Report -->
-        <!-- ---------------------------------- -->
-        @role('Super Admin')
-        <li class="sidebar-item">
-            <a class="sidebar-link justify-content-between" href="{{ url('survey-report/list') }}" aria-expanded="false">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="fa-solid fa-square-poll-vertical"></i>
-                  </span>
-                    <span class="hide-menu">Report</span>
-                </div>
-            </a>
-        </li>
-        @endrole
-
-        <!-- ---------------------------------- -->
         <!-- Master Data -->
         <!-- ---------------------------------- -->
         @role('Super Admin')
@@ -109,32 +29,17 @@
         </li>
         @endrole
 
-        <!-- ---------------------------------- -->
-        <!-- Master Biodata -->
-        <!-- ---------------------------------- -->
-        @role('Super Admin')
-        <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ url('master-data/biodata/') }}"  aria-expanded="false">
-                <span>
-                    <i class="fa-solid fa-person-circle-check"></i>
-                </span>
-                <span class="hide-menu">Biodata</span>
-            </a>
-        </li>
-        @endrole
-
-        <hr>
 
         <!-- ---------------------------------- -->
         <!-- Master Aspect -->
         <!-- ---------------------------------- -->
         @role('Super Admin')
         <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ url('master-data/aspect/') }}"  aria-expanded="false">
+            <a class="sidebar-link" href="{{ url('admin/genres/') }}"  aria-expanded="false">
                 <span>
                     <i class="fa-solid fa-list-ol"></i>
                 </span>
-                <span class="hide-menu">Aspect</span>
+                <span class="hide-menu">Genre</span>
             </a>
         </li>
         @endrole
@@ -144,41 +49,11 @@
         <!-- ---------------------------------- -->
         @role('Super Admin')
         <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ url('master-data/categories/') }}"  aria-expanded="false">
+            <a class="sidebar-link" href="{{ url('admin/songs/') }}"  aria-expanded="false">
                 <span>
                     <i class="fa-solid fa-list-ul"></i>
                 </span>
-                <span class="hide-menu">Categories</span>
-            </a>
-        </li>
-        @endrole
-
-        <!-- ---------------------------------- -->
-        <!-- Master Question -->
-        <!-- ---------------------------------- -->
-        @role('Super Admin')
-        <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ url('master-data/questions/') }}"  aria-expanded="false">
-                <span>
-                    <i class="fa-solid fa-spell-check"></i>
-                </span>
-                <span class="hide-menu">Questions</span>
-            </a>
-        </li>
-        @endrole
-
-        <hr>
-
-        <!-- ---------------------------------- -->
-        <!-- Master Answers -->
-        <!-- ---------------------------------- -->
-        @role('Super Admin')
-        <li class="sidebar-item">
-            <a class="sidebar-link" href="{{ url('master-data/answers/') }}"  aria-expanded="false">
-                <span>
-                  <i class="ti ti-zoom-question"></i>
-                </span>
-                <span class="hide-menu">Answers</span>
+                <span class="hide-menu">Song</span>
             </a>
         </li>
         @endrole

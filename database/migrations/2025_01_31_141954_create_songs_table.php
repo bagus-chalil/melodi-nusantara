@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('aspects', function (Blueprint $table) {
+        Schema::create('songs', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('title');
+            $table->string('artist');
+            $table->foreignId('genre_id')->constrained()->onDelete('cascade');
             $table->text('description')->nullable();
-            $table->text('author');
-            $table->enum('status',['0','1']);
+            $table->text('lyrics')->nullable();
+            $table->string('region')->nullable();
+            $table->string('file_path'); // Menyimpan path file musik
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('aspects');
+        Schema::dropIfExists('songs');
     }
 };

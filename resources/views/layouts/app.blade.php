@@ -31,13 +31,14 @@
             <!-- Start Vertical Layout Sidebar -->
             <!-- ---------------------------------- -->
             <div class="brand-logo d-flex align-items-center justify-content-between">
-                <a href="{{ url('/') }}" class="text-nowrap logo-img">
+                {{-- <a href="{{ url('/') }}" class="text-nowrap logo-img">
                     <img src="{{ asset('/assets/images/logos/dark-logo.png') }}" class="dark-logo" alt="Logo-Dark" width="150px" />
                     <img src="{{ asset('/assets/images/logos/light-logo.png') }}" class="light-logo" alt="Logo-light" width="150px" />
                 </a>
                 <a href="javascript:void(0)" class="sidebartoggler ms-auto text-decoration-none fs-5 d-block d-xl-none">
                     <i class="ti ti-x"></i>
-                </a>
+                </a> --}}
+                Melodi Nusantara
             </div>
 
             @include('layouts.components.sidebar')

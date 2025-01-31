@@ -15,7 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+            'MobileDetect' => Riverskies\Laravel\MobileDetect\Facades\MobileDetect::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

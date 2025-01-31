@@ -1,25 +1,18 @@
 <?php
 
-use App\Http\Controllers\AnswersController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AspectController;
-use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\QuestionsController;
-use App\Http\Controllers\SurveyController;
+use App\Http\Controllers\GenresController;
+use App\Http\Controllers\SongsController;
 
 //role admin
 Route::middleware('auth')->group(function () {
-    Route::group(['middleware' => ['role:Super Admin|Admin']], function () {
-
-        //Survey
-        Route::controller(SurveyController::class)
-        ->as('survey.')
-        ->prefix('survey')
-        ->group(function () {
-            //Admin
-            Route::get('/approval', 'approval');
-            Route::post('/approve-form-survey', 'approveFormSurvey');
+    Route::middleware(['auth', 'role:Super Admin|Admin'])->group(function () {
+        Route::prefix('admin')->name('admin.')->group(function () {
+            Route::resource('genres', GenresController::class)->except(['show']);
+            Route::resource('songs', SongsController::class)->except(['show']);
         });
+        Route::delete('genres/batch-delete', [GenresController::class, 'batchDelete'])->name('genres.batchDelete');
+        Route::delete('songs/batch-delete', [SongsController::class, 'batchDelete'])->name('genres.batchDelete');
     });
 });
 

@@ -6,4 +6,5 @@ return [
     Yajra\DataTables\DataTablesServiceProvider::class,
     Yajra\DataTables\ButtonsServiceProvider::class,
     Spatie\Permission\PermissionServiceProvider::class,
+    Riverskies\Laravel\MobileDetect\MobileDetectServiceProvider::class,
 ];

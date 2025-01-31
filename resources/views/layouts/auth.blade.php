@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="{{ asset('/assets/css/styles.css') }}" />
     <link rel="stylesheet" href="{{ asset('/assets/css/custom.css') }}" />
 
-    <title>@yield('title') - Web I-Survey-KF </title>
+    <title>@yield('title') - Melodi Nusantara </title>
 </head>
 
 <body>
@@ -27,15 +27,6 @@
     <div class="position-relative overflow-hidden radial-gradient min-vh-100 w-100">
         <div class="position-relative z-index-5">
             <div class="row">
-                <div class="col-xl-7 col-xxl-8">
-                    <a href="{{ url('/') }}" class="text-nowrap logo-img d-block px-4 py-9 w-100">
-                        <img src="{{ asset('/assets/images/logos/dark-logo.png') }}" class="dark-logo" alt="Logo-Dark" width="150px" />
-                        <img src="{{ asset('/assets/images/logos/dark-logo.png') }}" class="light-logo" alt="Logo-light" width="150px" />
-                    </a>
-                    <div class="d-none d-xl-flex align-items-center justify-content-center h-n80">
-                        <img src="{{ asset('/assets/images/backgrounds/login-cover.png') }}" alt="modernize-img" class="img-fluid" width="500">
-                    </div>
-                </div>
                 @yield('content')
             </div>
         </div>
