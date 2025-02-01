@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('artist');
-            $table->foreignId('genre_id')->constrained()->onDelete('cascade');
             $table->text('description')->nullable();
             $table->text('lyrics')->nullable();
             $table->string('region')->nullable();

@@ -1,69 +1,62 @@
-<!-- Song Modal -->
 <div class="modal fade" id="songModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
-        <form id="songForm">
+        <form id="songForm" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" id="songId" name="id">
+
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Song Form</h5>
+                    <h5 class="modal-title">Form Lagu</h5>
                     <button type="button" class="close" id="closeModal" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    @csrf
-                    <input type="hidden" id="songId" name="id">
+                    <div id="errorAlert" class="alert alert-danger d-none"></div> <!-- Alert Error -->
 
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Title <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="title" required>
-                            </div>
+                            <label>Judul Lagu <span class="text-danger">*</span></label>
+                            <input type="text" id="title" name="title" class="form-control" required>
+                            <br>
 
-                            <div class="form-group">
-                                <label>Artist <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="artist" required>
-                            </div>
+                            <label>Kategori <span class="text-danger">*</span></label>
+                            <select id="category" name="category" class="form-select" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="daerah">Daerah</option>
+                                <option value="nasional">Nasional</option>
+                            </select>
+                            <br>
 
-                            <div class="form-group">
-                                <label>Genre <span class="text-danger">*</span></label>
-                                <select class="form-control" name="genre_id" required>
-                                    <option value="">Select Genre</option>
-                                    @foreach($genres as $genre)
-                                        <option value="{{ $genre->id }}">{{ $genre->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            <label>Region</label>
+                            <input type="text" id="region" name="region" class="form-control">
                         </div>
 
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Audio File <span class="text-danger">*</span></label>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="file" id="fileInput" accept="audio/*">
-                                    <label class="custom-file-label" for="fileInput">Choose file</label>
-                                </div>
-                                <small class="form-text text-muted">Allowed formats: MP3, WAV (Max 10MB)</small>
-                                <div id="filePreview" class="mt-2"></div>
-                            </div>
+                            <label>File Audio <span class="text-danger">*</span></label>
+                            <input type="file" id="file" name="file" class="form-control">
+                            <audio id="audioPreview" class="mt-2 w-100" controls style="display: none;"></audio>
+                            <br>
 
-                            <div class="form-group">
-                                <label>Region</label>
-                                <input type="text" class="form-control" name="region">
-                            </div>
+                            <label>Thumbnail</label>
+                            <input type="file" id="thumbnail" name="thumbnail" class="form-control">
+                            <img id="thumbnail-preview" width="100" class="mt-2" style="display: none;">
+                            <br>
+
+                            <label>File Lirik (PDF/DOC)</label>
+                            <input type="file" id="lyrics" name="lyrics" class="form-control">
+                            <a id="lyricsPreview" href="#" class="mt-2 d-block text-primary" target="_blank" style="display: none;">Download Lirik</a>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea class="form-control" name="description" rows="2"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Lyrics</label>
-                        <textarea class="form-control" name="lyrics" rows="4"></textarea>
+                        <div class="col-12">
+                            <label>Sumber</label>
+                            <input type="url" id="source" name="source" class="form-control">
+                            <br>
+                            <label>Deskripsi</label>
+                            <textarea id="description" name="description" class="form-control"></textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
         </form>

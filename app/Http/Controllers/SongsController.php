@@ -8,20 +8,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
-class SongsController extends Controller
-{
+class SongsController extends Controller {
     public function index(Request $request) {
         if ($request->ajax()) {
-            $songs = Songs::with('genre')->select(['id', 'title', 'artist', 'genre_id', 'file_path', 'description', 'lyrics', 'region']);
+            $songs = Songs::select(['id', 'title', 'category', 'region', 'file_path', 'thumbnail']);
+
             return DataTables::of($songs)
                 ->addColumn('checkbox', function ($song) {
                     return '<input type="checkbox" class="song-checkbox" value="' . $song->id . '">';
                 })
-                ->addColumn('genre', function ($song) {
-                    return $song->genre->name ?? '-';
+                ->addColumn('thumbnail', function ($song) {
+                    return '<img src="' . $song->thumbnail_url . '" width="50">';
                 })
                 ->addColumn('file_preview', function ($song) {
-                    return '<audio controls class="w-100"><source src="' . Storage::url($song->file_path) . '" type="audio/mpeg"></audio>';
+                    return $song->file_path ? '<audio controls><source src="' . $song->file_url . '" type="audio/mpeg"></audio>' : '-';
                 })
                 ->addColumn('actions', function ($song) {
                     return '
@@ -29,72 +29,106 @@ class SongsController extends Controller
                         <button class="btn btn-sm btn-danger delete-song" data-id="' . $song->id . '">Hapus</button>
                     ';
                 })
-                ->rawColumns(['checkbox', 'file_preview', 'actions'])
+                ->rawColumns(['checkbox', 'thumbnail', 'file_preview', 'actions'])
                 ->make(true);
         }
 
-        $genres = Genres::all();
-        return view('apps.admin.songs.index', compact('genres'));
+        return view('apps.admin.songs.index');
     }
 
     public function store(Request $request) {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'artist' => 'required|string|max:255',
-            'genre_id' => 'required|exists:genres,id',
             'description' => 'nullable|string',
-            'lyrics' => 'nullable|string',
+            'file' => 'nullable|mimes:mp3,wav|max:10240',
+            'lyrics' => 'nullable|mimes:txt,pdf,docx,doc|max:2048',
+            'thumbnail' => 'nullable|image|mimes:jpg,png,webp|max:2048',
             'region' => 'nullable|string|max:100',
-            'file' => 'required|mimes:mp3,wav|max:10240',
+            'category' => 'required|in:daerah,nasional',
+            'source' => 'nullable|url',
         ]);
 
-        $filePath = $request->file('file')->store('songs', 'public');
+        if ($request->hasFile('file')) {
+            $validated['file_path'] = $request->file('file')->store('songs', 'public');
+        }
+        if ($request->hasFile('lyrics')) {
+            $validated['lyrics'] = $request->file('lyrics')->store('lyrics', 'public');
+        }
+        if ($request->hasFile('thumbnail')) {
+            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+        }
 
-        Songs::create($validated + ['file_path' => $filePath]);
-
-        return response()->json(['success' => 'Song created successfully']);
+        Songs::create($validated);
+        return response()->json(['success' => 'Lagu berhasil ditambahkan']);
     }
 
-    public function edit(Songs $song) {
-        return response()->json($song);
+    public function edit($id) {
+        $song = Songs::findOrFail($id);
+
+        return response()->json([
+            'id' => $song->id,
+            'title' => $song->title,
+            'description' => $song->description,
+            'category' => $song->category,
+            'region' => $song->region,
+            'source' => $song->source,
+            'file_url' => $song->file_path ? asset('storage/' . $song->file_path) : null,
+            'lyrics_url' => $song->lyrics ? asset('storage/' . $song->lyrics) : null,
+            'thumbnail_url' => $song->thumbnail ? asset('storage/' . $song->thumbnail) : asset('default-thumbnail.jpg')
+        ]);
     }
 
-    public function update(Request $request, Songs $song) {
+    public function update(Request $request, $id) {
+        $song = Songs::findOrFail($id);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'artist' => 'required|string|max:255',
-            'genre_id' => 'required|exists:genres,id',
             'description' => 'nullable|string',
-            'lyrics' => 'nullable|string',
-            'region' => 'nullable|string|max:100',
             'file' => 'nullable|mimes:mp3,wav|max:10240',
+            'lyrics' => 'nullable|mimes:txt,pdf,docx,doc|max:2048',
+            'thumbnail' => 'nullable|image|mimes:jpg,png,webp|max:2048',
+            'region' => 'nullable|string|max:100',
+            'category' => 'required|in:daerah,nasional',
+            'source' => 'nullable|url',
         ]);
 
+        // Jika ada file baru, hapus file lama lalu simpan yang baru
         if ($request->hasFile('file')) {
             Storage::disk('public')->delete($song->file_path);
             $validated['file_path'] = $request->file('file')->store('songs', 'public');
         }
 
-        $song->update($validated);
+        if ($request->hasFile('lyrics')) {
+            Storage::disk('public')->delete($song->lyrics);
+            $validated['lyrics'] = $request->file('lyrics')->store('lyrics', 'public');
+        }
 
-        return response()->json(['success' => 'Song updated successfully']);
+        if ($request->hasFile('thumbnail')) {
+            Storage::disk('public')->delete($song->thumbnail);
+            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+        }
+
+        $song->update($validated);
+        return response()->json(['success' => 'Lagu berhasil diperbarui']);
     }
 
-    public function destroy(Songs $song) {
-        Storage::disk('public')->delete($song->file_path);
+
+    public function destroy($id) {
+        $song = Songs::findOrFail($id);
+        Storage::disk('public')->delete([$song->file_path, $song->lyrics, $song->thumbnail]);
         $song->delete();
-        return response()->json(['success' => 'Song deleted successfully']);
+        return response()->json(['success' => 'Lagu berhasil dihapus']);
     }
 
     public function batchDelete(Request $request) {
-        $request->validate(['ids' => 'required|array|min:1']);
+        $ids = $request->validate(['ids' => 'required|array|min:1'])['ids'];
+        $songs = Songs::whereIn('id', $ids)->get();
 
-        $songs = Songs::whereIn('id', $request->ids)->get();
         foreach ($songs as $song) {
-            Storage::disk('public')->delete($song->file_path);
+            Storage::disk('public')->delete([$song->file_path, $song->lyrics, $song->thumbnail]);
             $song->delete();
         }
 
-        return response()->json(['success' => 'Selected songs deleted successfully']);
+        return response()->json(['success' => 'Beberapa lagu berhasil dihapus']);
     }
 }
