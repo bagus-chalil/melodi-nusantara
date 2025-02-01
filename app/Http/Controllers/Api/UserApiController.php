@@ -55,7 +55,7 @@ class UserApiController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'is_active' => "1", // Default aktif
+                // 'is_active' => "1", // Default aktif
             ]);
 
             return response()->json([
