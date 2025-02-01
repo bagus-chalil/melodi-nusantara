@@ -12,7 +12,7 @@
     <!-- Favicon icon-->
     <link rel="shortcut icon" type="image/png" href="{{ asset('/assets/images/logos/favicon.png') }}" />
 
-    <title>@yield('title') - Web I-Survey-KF </title>
+    <title>@yield('title') - Melodi Nusantara </title>
 
     @include('layouts.components.styles')
     <!-- Scripts -->
