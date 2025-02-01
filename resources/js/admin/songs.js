@@ -110,12 +110,15 @@ $(document).ready(function() {
             text: "Data ini akan dihapus permanen!",
             icon: 'warning',
             showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
             confirmButtonText: 'Ya, Hapus!'
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
                     url: `/admin/songs/${id}`,
                     type: 'DELETE',
+                    data: { _token: $('meta[name="csrf-token"]').attr('content') },
                     success: function(response) {
                         Swal.fire('Terhapus!', response.success, 'success');
                         table.ajax.reload();

@@ -40,10 +40,10 @@ class SongsController extends Controller {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'file' => 'nullable|mimes:mp3,wav|max:10240',
-            'lyrics' => 'nullable|mimes:txt,pdf,docx,doc|max:2048',
-            'thumbnail' => 'nullable|image|mimes:jpg,png,webp|max:2048',
-            'region' => 'nullable|string|max:100',
+            'file' => 'required|mimes:mp3,wav|max:10240',
+            'lyrics' => 'required|mimes:txt,pdf,docx,doc|max:2048',
+            'thumbnail' => 'required|image|mimes:jpg,png,webp|max:2048',
+            'region' => 'required|string|max:100',
             'category' => 'required|in:daerah,nasional',
             'source' => 'nullable|url',
         ]);
@@ -84,10 +84,10 @@ class SongsController extends Controller {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'file' => 'nullable|mimes:mp3,wav|max:10240',
-            'lyrics' => 'nullable|mimes:txt,pdf,docx,doc|max:2048',
-            'thumbnail' => 'nullable|image|mimes:jpg,png,webp|max:2048',
-            'region' => 'nullable|string|max:100',
+            'file' => 'required|mimes:mp3,wav|max:10240',
+            'lyrics' => 'required|mimes:txt,pdf,docx,doc|max:2048',
+            'thumbnail' => 'required|image|mimes:jpg,png,webp|max:2048',
+            'region' => 'required|string|max:100',
             'category' => 'required|in:daerah,nasional',
             'source' => 'nullable|url',
         ]);
@@ -115,7 +115,18 @@ class SongsController extends Controller {
 
     public function destroy($id) {
         $song = Songs::findOrFail($id);
-        Storage::disk('public')->delete([$song->file_path, $song->lyrics, $song->thumbnail]);
+
+        // Hanya hapus file jika ada di storage
+        if ($song->file_path && Storage::disk('public')->exists($song->file_path)) {
+            Storage::disk('public')->delete($song->file_path);
+        }
+        if ($song->lyrics && Storage::disk('public')->exists($song->lyrics)) {
+            Storage::disk('public')->delete($song->lyrics);
+        }
+        if ($song->thumbnail && Storage::disk('public')->exists($song->thumbnail)) {
+            Storage::disk('public')->delete($song->thumbnail);
+        }
+
         $song->delete();
         return response()->json(['success' => 'Lagu berhasil dihapus']);
     }
