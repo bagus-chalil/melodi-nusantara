@@ -16,20 +16,11 @@ class SongApiController extends Controller
     public function index()
     {
         try {
-            $songs = Songs::select('id', 'title', 'description', 'category', 'region', 'source', 'file_path', 'lyrics', 'thumbnail')
+            $songs = Songs::orderBy('id')
+                ->select('id', 'title', 'description', 'category', 'region', 'source', 'file_path', 'lyrics', 'thumbnail')
                 ->get()
                 ->map(function ($song) {
-                    return [
-                        'id' => $song->id,
-                        'title' => $song->title,
-                        'description' => $song->description,
-                        'category' => $song->category,
-                        'region' => $song->region,
-                        'source' => $song->source,
-                        'file_url' => $song->file_path ? asset('storage/' . $song->file_path) : null,
-                        'lyrics_url' => $song->lyrics ? asset('storage/' . $song->lyrics) : null,
-                        'thumbnail_url' => $song->thumbnail ? asset('storage/' . $song->thumbnail) : asset('default-thumbnail.jpg'),
-                    ];
+                    return $this->formatSongData($song);
                 });
 
             return response()->json([
@@ -38,11 +29,7 @@ class SongApiController extends Controller
                 'data' => $songs
             ], 200);
         } catch (Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Gagal mengambil lagu',
-                'error' => $e->getMessage()
-            ], 500);
+            return $this->serverErrorResponse('Gagal mengambil lagu', $e);
         }
     }
 
@@ -64,20 +51,11 @@ class SongApiController extends Controller
                 $query->where('region', 'LIKE', '%' . $request->region . '%');
             }
 
-            $songs = $query->select('id', 'title', 'description', 'category', 'region', 'source', 'file_path', 'lyrics', 'thumbnail')
+            $songs = $query->orderBy('id')
+                ->select('id', 'title', 'description', 'category', 'region', 'source', 'file_path', 'lyrics', 'thumbnail')
                 ->get()
                 ->map(function ($song) {
-                    return [
-                        'id' => $song->id,
-                        'title' => $song->title,
-                        'description' => $song->description,
-                        'category' => $song->category,
-                        'region' => $song->region,
-                        'source' => $song->source,
-                        'file_url' => $song->file_path ? asset('storage/' . $song->file_path) : null,
-                        'lyrics_url' => $song->lyrics ? asset('storage/' . $song->lyrics) : null,
-                        'thumbnail_url' => $song->thumbnail ? asset('storage/' . $song->thumbnail) : asset('default-thumbnail.jpg'),
-                    ];
+                    return $this->formatSongData($song);
                 });
 
             if ($songs->isEmpty()) {
@@ -94,16 +72,12 @@ class SongApiController extends Controller
                 'data' => $songs
             ], 200);
         } catch (Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Terjadi kesalahan saat mencari lagu',
-                'error' => $e->getMessage()
-            ], 500);
+            return $this->serverErrorResponse('Terjadi kesalahan saat mencari lagu', $e);
         }
     }
 
     /**
-     * GET Detail Lagu berdasarkan ID
+     * GET Detail Lagu berdasarkan ID dengan Next & Previous Song
      */
     public function show($id)
     {
@@ -112,19 +86,21 @@ class SongApiController extends Controller
                 ->where('id', $id)
                 ->firstOrFail();
 
+            $nextSong = Songs::where('id', '>', $id)
+                ->orderBy('id')
+                ->first();
+
+            $prevSong = Songs::where('id', '<', $id)
+                ->orderBy('id', 'desc')
+                ->first();
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Detail lagu ditemukan',
                 'data' => [
-                    'id' => $song->id,
-                    'title' => $song->title,
-                    'description' => $song->description,
-                    'category' => $song->category,
-                    'region' => $song->region,
-                    'source' => $song->source,
-                    'file_url' => $song->file_path ? asset('storage/' . $song->file_path) : null,
-                    'lyrics_url' => $song->lyrics ? asset('storage/' . $song->lyrics) : null,
-                    'thumbnail_url' => $song->thumbnail ? asset('storage/' . $song->thumbnail) : asset('default-thumbnail.jpg'),
+                    'current_song' => $this->formatSongData($song),
+                    'prev_song' => $prevSong ? $this->formatSongData($prevSong) : null,
+                    'next_song' => $nextSong ? $this->formatSongData($nextSong) : null,
                 ]
             ], 200);
         } catch (ModelNotFoundException $e) {
@@ -134,11 +110,38 @@ class SongApiController extends Controller
                 'error' => 'Data tidak ditemukan'
             ], 404);
         } catch (Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Terjadi kesalahan saat mengambil detail lagu',
-                'error' => $e->getMessage()
-            ], 500);
+            return $this->serverErrorResponse('Terjadi kesalahan saat mengambil detail lagu', $e);
         }
     }
+
+    /**
+     * Format Data Lagu untuk Konsistensi
+     */
+    private function formatSongData($song)
+    {
+        return [
+            'id' => $song->id,
+            'title' => $song->title,
+            'description' => $song->description,
+            'category' => $song->category,
+            'region' => $song->region,
+            'source' => $song->source,
+            'file_url' => $song->file_path ? asset('storage/' . $song->file_path) : null,
+            'lyrics_url' => $song->lyrics ? asset('storage/' . $song->lyrics) : null,
+            'thumbnail_url' => $song->thumbnail ? asset('storage/' . $song->thumbnail) : asset('default-thumbnail.jpg'),
+        ];
+    }
+
+    /**
+     * Standardized Server Error Response
+     */
+    private function serverErrorResponse($message, $exception)
+    {
+        return response()->json([
+            'status' => 'error',
+            'message' => $message,
+            'error' => $exception->getMessage()
+        ], 500);
+    }
 }
+
