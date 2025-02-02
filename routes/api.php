@@ -16,6 +16,7 @@ Route::prefix('api')->name('api.')->group(function () {
     Route::get('/playlists/{id}', [PlaylistApiController::class, 'show']);
     Route::get('/playlists/{playlistId}/song/{songId}/next-prev', [PlaylistApiController::class, 'getNextPrevSong']);
     Route::delete('/playlists/{id}', [PlaylistApiController::class, 'destroy']);
+    Route::delete('playlist/{playlistId}/remove-song/{songId}', [PlaylistApiController::class, 'removeSongFromPlaylist']);
 
     //User
     Route::get('/users', [UserApiController::class, 'index']);

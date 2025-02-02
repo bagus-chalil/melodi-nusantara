@@ -251,6 +251,56 @@ class PlaylistApiController extends Controller
         ];
     }
 
+    public function removeSongFromPlaylist(Request $request, $playlistId, $songId)
+    {
+        try {
+            // Cek apakah playlist ada dan dimiliki oleh user_id
+            $playlist = Playlist::where('id', $playlistId)
+                ->where('user_id', $request->user_id)
+                ->firstOrFail();
+
+            // Ambil daftar lagu dalam playlist (decode dari JSON)
+            $songArray = json_decode($playlist->song_id, true) ?? [];
+
+            // Cek apakah lagu ada di dalam playlist
+            if (!in_array($songId, $songArray)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Lagu tidak ditemukan dalam playlist'
+                ], 404);
+            }
+
+            // Hapus lagu dari array
+            $updatedSongs = array_values(array_diff($songArray, [$songId]));
+
+            // Jika playlist kosong setelah penghapusan, hapus playlist
+            if (empty($updatedSongs)) {
+                $playlist->delete();
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Playlist dihapus karena tidak ada lagu tersisa'
+                ], 200);
+            }
+
+            // Simpan perubahan pada playlist
+            $playlist->update(['song_id' => json_encode($updatedSongs)]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Lagu berhasil dihapus dari playlist',
+                'data' => $this->formatPlaylistData($playlist)
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Playlist tidak ditemukan atau user tidak memiliki akses',
+                'error' => 'Data tidak ditemukan'
+            ], 404);
+        } catch (Exception $e) {
+            return $this->serverErrorResponse('Terjadi kesalahan saat menghapus lagu dari playlist', $e);
+        }
+    }
+
 
     /**
      * Server Error Response
